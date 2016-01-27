@@ -1,5 +1,4 @@
 var gulp = require('gulp'),
-    livereload = require('gulp-livereload'),
     image = require('gulp-image'),
     watch = require('gulp-watch'),
     concat = require('gulp-concat'),
@@ -13,24 +12,15 @@ var gulp = require('gulp'),
 
 var jsPlugins = [
   './bower_components/jquery/dist/jquery.js',
-  './bower_components/bootstrap/dist/js/bootstrap.js'
+  './bower_components/bootstrap/dist/js/bootstrap.js',
+  './bower_components/jquery.nicescroll/jquery.nicescroll.js'
 ];
-
-gulp.task('live', function() {
-  return livereload.listen({
-    port: 3600,
-    host: '127.0.0.1',
-    start: true,
-    reloadPage: './index.html'
-  });
-});
 
 gulp.task('scripts', function() {
   return gulp.src(jsPlugins.concat(['./assets/js/**/*.js']))
-    .pipe(concat('app.js'))
     .pipe(uglify())
-    .pipe(gulp.dest('./dist/'))
-    .pipe(livereload());
+    .pipe(concat('app.js'))
+    .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('styles', function() {
@@ -39,8 +29,7 @@ gulp.task('styles', function() {
       paths: [path.join(__dirname, 'bower_components')],
       plugins: [cleancss]
     }))
-    .pipe(gulp.dest('./dist/'))
-    .pipe(livereload());
+    .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('images', function() {
@@ -68,6 +57,6 @@ gulp.task('watch-images', function() {
   return gulp.watch('./assets/images/**/*', ['images']);
 });
 
-gulp.task('watch', ['live', 'watch-scripts', 'watch-styles']);
+gulp.task('watch', ['watch-scripts', 'watch-styles']);
 
 gulp.task('default', ['watch']);
